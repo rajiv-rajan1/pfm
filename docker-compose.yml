@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  backend:
+    build: ./backend
+    container_name: pfm-backend
+    volumes:
+      - ./backend/waitlist.db:/app/waitlist.db
+    ports:
+      - "8000:8000"
+    networks:
+      - pfm-network
+
+  frontend:
+    build: ./frontend
+    container_name: pfm-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - pfm-network
+
+networks:
+  pfm-network:
+    driver: bridge
