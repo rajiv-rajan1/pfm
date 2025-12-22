@@ -1,17 +1,16 @@
-FROM nginx:alpine
+FROM node:18-slim
 
-# Install gettext for envsubst
-RUN apk add --no-cache gettext
+WORKDIR /app
 
-WORKDIR /usr/share/nginx/html
+# Install dependencies first (caching)
+COPY package.json .
+RUN npm install --only=production
 
+# Copy app source
 COPY . .
-COPY nginx.conf /etc/nginx/templates/default.conf.template
 
-# entrypoint.sh to run envsubst
-COPY entrypoint.sh /docker-entrypoint.d/40-envsubst.sh
-RUN chmod +x /docker-entrypoint.d/40-envsubst.sh
-
+# Expose port (Cloud Run defaults to 8080)
 EXPOSE 8080
 
-CMD ["nginx", "-g", "daemon off;"]
+# Start server
+CMD ["node", "server.js"]

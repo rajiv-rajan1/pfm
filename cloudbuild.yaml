@@ -23,7 +23,6 @@ steps:
       - '${_DEPLOY_REGION}'
       - '--platform'
       - '${_PLATFORM}'
-      - '--allow-unauthenticated'
     id: 'Deploy'
 
 images:
