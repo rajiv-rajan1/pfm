@@ -12,6 +12,6 @@ COPY nginx.conf /etc/nginx/templates/default.conf.template
 COPY entrypoint.sh /docker-entrypoint.d/40-envsubst.sh
 RUN chmod +x /docker-entrypoint.d/40-envsubst.sh
 
-EXPOSE 80
+EXPOSE 8080
 
 CMD ["nginx", "-g", "daemon off;"]
