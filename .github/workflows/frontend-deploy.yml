@@ -1,0 +1,56 @@
+name: Deploy Frontend
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'frontend/**'
+  workflow_dispatch:
+
+env:
+  SERVICE_NAME: pfm-frontend
+  BACKEND_SERVICE_NAME: pfm-backend
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v2'
+        with:
+          workload_identity_provider: 'projects/386128391538/locations/global/workloadIdentityPools/github-pool/providers/github-provider'
+          service_account: 'github-ci-cd@pfm-2t1.iam.gserviceaccount.com'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v2
+
+      - name: Configure Docker
+        run: gcloud auth configure-docker ${{ secrets.GCP_REGION }}-docker.pkg.dev
+
+      - name: Get Backend URL
+        id: get-url
+        run: |
+          URL=$(gcloud run services describe ${{ env.BACKEND_SERVICE_NAME }} --region ${{ secrets.GCP_REGION }} --format 'value(status.url)')
+          echo "BACKEND_URL=$URL" >> $GITHUB_OUTPUT || echo "BACKEND_URL=http://placeholder" >> $GITHUB_OUTPUT
+
+      - name: Build and Push Container
+        run: |
+          docker build -t ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }} ./frontend
+          docker push ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+
+      - name: Deploy to Cloud Run
+        uses: google-github-actions/deploy-cloudrun@v2
+        with:
+          service: ${{ env.SERVICE_NAME }}
+          image: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
+          region: ${{ secrets.GCP_REGION }}
+          flags: '--allow-unauthenticated --port=80'
+          env_vars: |
+            BACKEND_API_URL=${{ steps.get-url.outputs.BACKEND_URL }}
