@@ -36,3 +36,6 @@ substitutions:
   _PLATFORM: 'managed'
   _SERVICE_NAME: 'pfm'
   _TRIGGER_ID: '' # Default empty, usually populated by the trigger
+
+options:
+  logging: CLOUD_LOGGING_ONLY
