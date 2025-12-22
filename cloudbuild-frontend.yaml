@@ -10,21 +10,29 @@ steps:
     args: ['push', '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA']
     id: 'Push'
 
+  # Fetch Backend URL
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        gcloud run services describe pfm --region ${_DEPLOY_REGION} --format 'value(status.url)' > /workspace/backend_url.txt
+    id: 'FetchBackendURL'
+
   # Deploy container image to Cloud Run
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
+    entrypoint: 'bash'
     args:
-      - 'run'
-      - 'deploy'
-      - '${_SERVICE_NAME}'
-      - '--image'
-      - '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA'
-      - '--region'
-      - '${_DEPLOY_REGION}'
-      - '--platform'
-      - '${_PLATFORM}'
-      - '--allow-unauthenticated' # Frontend should be public
-      - '--port=8080' # Explicitly matching the container port
+      - '-c'
+      - |
+        BACKEND_URL=$(cat /workspace/backend_url.txt)
+        gcloud run deploy ${_SERVICE_NAME} \
+          --image ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA \
+          --region ${_DEPLOY_REGION} \
+          --platform ${_PLATFORM} \
+          --allow-unauthenticated \
+          --port 8080 \
+          --set-env-vars BACKEND_API_URL=$BACKEND_URL
     id: 'Deploy'
 
 images:
