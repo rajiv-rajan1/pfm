@@ -5,7 +5,7 @@ Run these commands in your Cloud Shell or local terminal (authenticated with `gc
 ## 1. Environment Variables
 Set these for your session:
 ```bash
-export PROJECT_ID="your-project-id"
+export PROJECT_ID="pfm-2t1"
 export REGION="us-central1"
 export REPO_NAME="pfm-repo"
 export SA_NAME="github-ci-cd"

@@ -5,7 +5,7 @@ const submitBtn = document.getElementById('submit-btn');
 
 form.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const email = emailInput.value;
     if (!email) return;
 
@@ -24,7 +24,16 @@ form.addEventListener('submit', async (e) => {
             body: JSON.stringify({ email }),
         });
 
-        const data = await response.json();
+        const contentType = response.headers.get('content-type');
+        let data;
+        if (contentType && contentType.includes('application/json')) {
+            data = await response.json();
+        } else {
+            // If not JSON, it's likely an HTML error page (403/500)
+            const text = await response.text();
+            console.error('Non-JSON response received:', text);
+            throw new Error(`Server returned non-JSON response: ${response.status} ${response.statusText}`);
+        }
 
         if (response.ok) {
             showMessage(data.message || 'Thanks for joining!', 'success');

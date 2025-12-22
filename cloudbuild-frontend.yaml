@@ -30,6 +30,7 @@ steps:
           --image ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA \
           --region ${_DEPLOY_REGION} \
           --platform ${_PLATFORM} \
+          --service-account=${_SA_EMAIL} \
           --allow-unauthenticated \
           --port 8080 \
           --set-env-vars BACKEND_API_URL=$BACKEND_URL
@@ -46,6 +47,7 @@ substitutions:
   _PLATFORM: 'managed'
   _SERVICE_NAME: 'pfm-frontend' # Distinct service name for frontend
   _TRIGGER_ID: '' # Default empty
+  _SA_EMAIL: 'github-ci-cd@pfm-2t1.iam.gserviceaccount.com' # Service Account to run as
 
 options:
   logging: CLOUD_LOGGING_ONLY
