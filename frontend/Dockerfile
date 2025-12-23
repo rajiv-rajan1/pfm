@@ -2,18 +2,21 @@ FROM node:18-slim
 
 WORKDIR /app
 
-# Install dependencies (including devDependencies for build)
-COPY package.json .
+# 1. Install dependencies
+COPY package.json package-lock.json* ./
+# Note: We use 'npm install' instead of 'npm ci --only=production' because
+# we need devDependencies (like vite) to run the build step below.
 RUN npm install
 
-# Copy app source
+# 2. Copy source code
 COPY . .
 
-# Build Vite app
+# 3. Build the Vite app (generates the 'dist' folder)
 RUN npm run build
 
-# Expose port (Cloud Run defaults to 8080)
+# 4. Expose port 8080
 EXPOSE 8080
 
-# Start server
+# 5. Start your custom server
+# Ensure your server.js uses process.env.PORT || 8080
 CMD ["node", "server.js"]
