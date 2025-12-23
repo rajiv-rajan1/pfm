@@ -1,0 +1,93 @@
+/**
+ * Angular-ready Spacing System
+ * Centralized spacing tokens for consistent layouts
+ * Can be imported in Angular components or used globally
+ */
+
+/* Spacing Scale - 8px base */
+$spacing-xxs: 0.25rem;  /* 4px */
+$spacing-xs: 0.5rem;     /* 8px */
+$spacing-sm: 0.75rem;    /* 12px */
+$spacing-md: 1rem;       /* 16px */
+$spacing-lg: 1.5rem;     /* 24px */
+$spacing-xl: 2rem;       /* 32px */
+$spacing-2xl: 3rem;      /* 48px */
+$spacing-3xl: 4rem;      /* 64px */
+$spacing-4xl: 6rem;      /* 96px */
+
+/* Component-specific spacing */
+$card-padding: $spacing-lg;
+$card-gap: $spacing-md;
+$section-margin: $spacing-2xl;
+$container-padding: $spacing-xl;
+$button-padding-x: $spacing-lg;
+$button-padding-y: $spacing-sm;
+$form-field-gap: $spacing-md;
+
+/* Layout spacing */
+$layout-gutter: $spacing-lg;
+$layout-section-gap: $spacing-2xl;
+$layout-container-max-width: 1280px;
+
+/* Responsive breakpoints (matching Tailwind) */
+$breakpoint-sm: 640px;
+$breakpoint-md: 768px;
+$breakpoint-lg: 1024px;
+$breakpoint-xl: 1280px;
+$breakpoint-2xl: 1536px;
+
+/* Export as CSS variables for maximum flexibility */
+:root {
+  --spacing-xxs: #{$spacing-xxs};
+  --spacing-xs: #{$spacing-xs};
+  --spacing-sm: #{$spacing-sm};
+  --spacing-md: #{$spacing-md};
+  --spacing-lg: #{$spacing-lg};
+  --spacing-xl: #{$spacing-xl};
+  --spacing-2xl: #{$spacing-2xl};
+  --spacing-3xl: #{$spacing-3xl};
+  --spacing-4xl: #{$spacing-4xl};
+  
+  --card-padding: #{$card-padding};
+  --section-margin: #{$section-margin};
+  --container-padding: #{$container-padding};
+}
+
+/* Utility classes for spacing (Angular-friendly) */
+.spacing-section {
+  margin-bottom: var(--section-margin);
+}
+
+.spacing-card {
+  padding: var(--card-padding);
+}
+
+.spacing-form {
+  > * + * {
+    margin-top: var(--form-field-gap);
+  }
+}
+
+/* Professional layout helpers */
+.layout-container {
+  max-width: $layout-container-max-width;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--container-padding);
+  padding-right: var(--container-padding);
+  
+  @media (max-width: $breakpoint-md) {
+    padding-left: var(--spacing-md);
+    padding-right: var(--spacing-md);
+  }
+}
+
+.layout-grid {
+  display: grid;
+  gap: var(--layout-gutter);
+}
+
+.layout-flex {
+  display: flex;
+  gap: var(--layout-gutter);
+}
