@@ -51,6 +51,6 @@ jobs:
           service: ${{ env.SERVICE_NAME }}
           image: ${{ secrets.GCP_REGION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/${{ secrets.ARTIFACT_REGISTRY_REPO }}/${{ env.SERVICE_NAME }}:${{ github.sha }}
           region: ${{ secrets.GCP_REGION }}
-          flags: '--allow-unauthenticated --port=80'
+          flags: '--allow-unauthenticated --port=8080'
           env_vars: |
             BACKEND_API_URL=${{ steps.get-url.outputs.BACKEND_URL }}
