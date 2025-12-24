@@ -12,6 +12,7 @@ import {
   Shield,
   Clock,
   Home as HomeIcon,
+  Info,
 } from 'lucide-react';
 import { ThemeProvider } from './providers/ThemeProvider';
 import { ThemeToggle } from './components/ThemeToggle';
@@ -25,6 +26,7 @@ import { Dashboard } from './components/Dashboard';
 import { Reports } from './components/Reports';
 import { Goals } from './components/Goals';
 import { Settings } from './components/Settings';
+import { About } from './components/About';
 import { VoiceAIAssistant } from './components/VoiceAIAssistant';
 import { RetentionBanner, AIQuotaBanner, MockDataBanner } from './components/RetentionBanner';
 import { Button } from './components/ui/button';
@@ -46,7 +48,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
 type AppState = 'welcome' | 'login' | 'home' | 'manual-entry' | 'onboarding' | 'app' | 'activation';
-type View = 'home' | 'dashboard' | 'reports' | 'goals' | 'settings';
+type View = 'home' | 'dashboard' | 'reports' | 'goals' | 'settings' | 'about';
 
 export default function App() {
   const { user, logout } = useAuth();
@@ -133,6 +135,7 @@ export default function App() {
     { id: 'reports' as View, label: 'Reports', icon: FileText },
     { id: 'goals' as View, label: 'Goals', icon: Target },
     { id: 'settings' as View, label: 'Settings', icon: SettingsIcon },
+    { id: 'about' as View, label: 'About 2t1', icon: Info },
   ];
 
   // Determine if we should show "Demo" or "Dashboard" button
@@ -420,6 +423,12 @@ export default function App() {
           {currentView === 'reports' && <Reports />}
           {currentView === 'goals' && <Goals />}
           {currentView === 'settings' && <Settings />}
+          {currentView === 'about' && (
+            <About onJoinMovement={() => {
+              if (!user) setAppState('login');
+              else setCurrentView('dashboard');
+            }} />
+          )}
         </main>
 
         {/* AI Assistant Panel */}
