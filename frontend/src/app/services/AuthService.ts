@@ -94,7 +94,10 @@ export class AuthService {
   static async signInWithGoogle(credentialToken: string): Promise<User> {
     try {
       // Send credential to backend for verification
-      const response = await fetch('/api/auth/google', {
+      const apiPath = '/api/auth/google';
+      console.log(`Authenticating with backend at: ${apiPath}`);
+
+      const response = await fetch(apiPath, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -102,22 +105,28 @@ export class AuthService {
         body: JSON.stringify({ token: credentialToken }),
       });
 
+      const responseText = await response.text();
+      console.log('Backend response status:', response.status);
+
       if (!response.ok) {
-        let errorMessage = 'Google authentication failed';
-        try {
-          const errorData = await response.json();
-          errorMessage = errorData.detail || errorMessage;
-        } catch (e) {
-          const text = await response.text();
-          console.error('Non-JSON error response:', text);
-          errorMessage = `Server error (${response.status}): ${text.substring(0, 100)}`;
+        let errorMessage = `Google authentication failed (Status: ${response.status})`;
+        if (responseText) {
+          try {
+            const errorData = JSON.parse(responseText);
+            errorMessage = errorData.detail || errorMessage;
+          } catch (e) {
+            console.error('Non-JSON error response:', responseText);
+            errorMessage = `Server error: ${responseText.substring(0, 100)}`;
+          }
+        } else {
+          errorMessage = `Server returned an empty error response (Status: ${response.status}). Is the backend running?`;
         }
         throw new Error(errorMessage);
       }
 
       let data;
       try {
-        data = await response.json();
+        data = JSON.parse(responseText);
       } catch (e) {
         throw new Error('Failed to parse server response as JSON');
       }

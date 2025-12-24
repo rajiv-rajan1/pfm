@@ -6,12 +6,18 @@ from google.oauth2 import id_token
 from google.auth.transport import requests
 from fastapi import HTTPException, status
 
-# Load from environment variable
-GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID', '')
+# Load from environment variable (check both standard and Vite-prefixed)
+GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID') or os.getenv('VITE_GOOGLE_CLIENT_ID', '')
 
 def verify_google_token(token: str) -> dict:
     """
     Verify Google OAuth ID token and return user information
+    """
+    if not GOOGLE_CLIENT_ID:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="GOOGLE_CLIENT_ID is not configured on the server."
+        )
     
     Args:
         token: Google ID token from frontend
