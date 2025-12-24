@@ -14,7 +14,7 @@ export interface User {
 
 export class AuthService {
   private static STORAGE_KEY = 'financeos_user';
-  private static GOOGLE_CLIENT_ID = 'YOUR_GOOGLE_CLIENT_ID'; // Replace with actual Google Client ID
+  private static GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
   /**
    * Load current user from storage

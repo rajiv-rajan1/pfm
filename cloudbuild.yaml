@@ -1,7 +1,14 @@
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA', '.']
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        docker build \
+        --build-arg VITE_GOOGLE_CLIENT_ID=${_VITE_GOOGLE_CLIENT_ID} \
+        -t ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA \
+        .
     dir: 'frontend'
     id: 'Build'
 
@@ -23,6 +30,7 @@ steps:
       - '${_DEPLOY_REGION}'
       - '--platform'
       - '${_PLATFORM}'
+      - '--allow-unauthenticated'
     id: 'Deploy'
 
 images:
@@ -34,8 +42,9 @@ substitutions:
   _AR_REPOSITORY: 'cloud-run-source-deploy'
   _DEPLOY_REGION: 'europe-west1'
   _PLATFORM: 'managed'
-  _SERVICE_NAME: 'pfm'
-  _TRIGGER_ID: '' # Default empty, usually populated by the trigger
+  _SERVICE_NAME: 'pfm-frontend'
+  _TRIGGER_ID: '' 
+  _VITE_GOOGLE_CLIENT_ID: 'PLACEHOLDER_VALUE' # Overridden by Trigger
 
 options:
   logging: CLOUD_LOGGING_ONLY

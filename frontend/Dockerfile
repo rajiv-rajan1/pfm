@@ -4,6 +4,12 @@ WORKDIR /app
 
 # Install dependencies
 COPY package.json package-lock.json* ./
+
+# 1. Declare the argument
+ARG VITE_GOOGLE_CLIENT_ID
+# 2. Set it as an environment variable for the build step
+ENV VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID
+
 RUN npm install
 
 # Copy source code
