@@ -1,11 +1,7 @@
-import express from 'express';
-import { createProxyMiddleware } from 'http-proxy-middleware';
-import { GoogleAuth } from 'google-auth-library';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const express = require('express');
+const { createProxyMiddleware } = require('http-proxy-middleware');
+const { GoogleAuth } = require('google-auth-library');
+const path = require('path');
 
 const app = express();
 const auth = new GoogleAuth();
@@ -14,8 +10,8 @@ const backendUrl = process.env.BACKEND_API_URL;
 
 console.log(`Starting server. Backend URL: ${backendUrl}`);
 
-// Serve static files from dist
-app.use(express.static(path.join(__dirname, 'dist')));
+// Serve static files
+app.use(express.static(path.join(__dirname, '.')));
 
 const skipAuth = process.env.SKIP_AUTH === 'true';
 
@@ -40,6 +36,8 @@ if (backendUrl) {
     });
 
     // 2. Proxy Middleware
+    // We use context matching ('/api') so http-proxy-middleware sees the full URL
+    // and forwards it correctly without us needing to manually rewrite/add prefixes.
     app.use(createProxyMiddleware('/api', {
         target: backendUrl,
         changeOrigin: true,
@@ -53,11 +51,11 @@ if (backendUrl) {
     console.warn('BACKEND_API_URL not set. API proxying will not work.');
 }
 
-// Fallback for SPA
+// Fallback for SPA (if we had client-side routing, which we don't really, but good practice)
 app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, 'dist', 'index.html'));
+    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
-app.listen(port, '0.0.0.0', () => {
-    console.log(`Frontend server listening on port ${port} (0.0.0.0)`);
+app.listen(port, () => {
+    console.log(`Frontend server listening on port ${port}`);
 });
