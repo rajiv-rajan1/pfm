@@ -59,6 +59,11 @@ export default function App() {
   const [aiMinimized, setAiMinimized] = useState(false);
   const [isUsingMockData, setIsUsingMockData] = useState(true);
 
+  // Debug: Check if Client ID is loaded
+  useEffect(() => {
+    console.log('Google Client ID Status:', GOOGLE_CLIENT_ID ? 'Loaded' : 'Missing', GOOGLE_CLIENT_ID.substring(0, 10) + '...');
+  }, []);
+
   // Check authentication on mount - NO PAYMENT BLOCKER
   useEffect(() => {
     if (user) {
