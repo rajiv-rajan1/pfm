@@ -94,7 +94,7 @@ export class AuthService {
   static async signInWithGoogle(credentialToken: string): Promise<User> {
     try {
       // Send credential to backend for verification
-      const response = await fetch('http://localhost:8000/api/auth/google', {
+      const response = await fetch('/api/auth/google', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -103,11 +103,24 @@ export class AuthService {
       });
 
       if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.detail || 'Google authentication failed');
+        let errorMessage = 'Google authentication failed';
+        try {
+          const errorData = await response.json();
+          errorMessage = errorData.detail || errorMessage;
+        } catch (e) {
+          const text = await response.text();
+          console.error('Non-JSON error response:', text);
+          errorMessage = `Server error (${response.status}): ${text.substring(0, 100)}`;
+        }
+        throw new Error(errorMessage);
       }
 
-      const data = await response.json();
+      let data;
+      try {
+        data = await response.json();
+      } catch (e) {
+        throw new Error('Failed to parse server response as JSON');
+      }
 
       const googleUser: User = {
         id: data.user.id,
