@@ -12,12 +12,6 @@ GOOGLE_CLIENT_ID = os.getenv('GOOGLE_CLIENT_ID') or os.getenv('VITE_GOOGLE_CLIEN
 def verify_google_token(token: str) -> dict:
     """
     Verify Google OAuth ID token and return user information
-    """
-    if not GOOGLE_CLIENT_ID:
-        raise HTTPException(
-            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
-            detail="GOOGLE_CLIENT_ID is not configured on the server."
-        )
     
     Args:
         token: Google ID token from frontend
@@ -28,6 +22,11 @@ def verify_google_token(token: str) -> dict:
     Raises:
         HTTPException: If token is invalid
     """
+    if not GOOGLE_CLIENT_ID:
+        raise HTTPException(
+            status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            detail="GOOGLE_CLIENT_ID is not configured on the server."
+        )
     try:
         # Verify the token
         idinfo = id_token.verify_oauth2_token(

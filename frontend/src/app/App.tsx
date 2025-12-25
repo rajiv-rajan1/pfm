@@ -29,6 +29,9 @@ import { Settings } from './components/Settings';
 import { About } from './components/About';
 import { VoiceAIAssistant } from './components/VoiceAIAssistant';
 import { RetentionBanner, AIQuotaBanner, MockDataBanner } from './components/RetentionBanner';
+import { Footer } from './components/Footer';
+import { Terms } from './pages/Terms';
+import { Privacy } from './pages/Privacy';
 import { Button } from './components/ui/button';
 import {
   DropdownMenu,
@@ -47,7 +50,7 @@ import { GoogleOAuthProvider } from '@react-oauth/google';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
-type AppState = 'welcome' | 'login' | 'home' | 'manual-entry' | 'onboarding' | 'app' | 'activation';
+type AppState = 'welcome' | 'login' | 'home' | 'manual-entry' | 'onboarding' | 'app' | 'activation' | 'terms' | 'privacy';
 type View = 'home' | 'dashboard' | 'reports' | 'goals' | 'settings' | 'about';
 
 export default function App() {
@@ -60,10 +63,19 @@ export default function App() {
   const [isUsingMockData, setIsUsingMockData] = useState(true);
 
   // Debug: Check if Client ID is loaded
+  // Debug: Check if Client ID is loaded
   useEffect(() => {
     console.log('Google Client ID Status:', GOOGLE_CLIENT_ID ? 'Loaded' : 'Missing');
     if (GOOGLE_CLIENT_ID) {
       console.log('Diagnostic: Client ID length =', GOOGLE_CLIENT_ID.length);
+    }
+
+    // Handle initial URL routing for legal pages
+    const path = window.location.pathname;
+    if (path === '/terms') {
+      setAppState('terms');
+    } else if (path === '/privacy') {
+      setAppState('privacy');
     }
   }, []);
 
@@ -259,6 +271,31 @@ export default function App() {
           onHomeClick={handleHomeClick}
           onDashboardClick={handleDashboardClick}
         />
+      </ThemeProvider>
+    );
+  }
+
+  // Legal Pages
+  if (appState === 'terms') {
+    return (
+      <ThemeProvider>
+        <Terms onBack={() => {
+          if (user) setAppState('app');
+          else setAppState('welcome');
+          window.history.pushState({}, '', '/');
+        }} />
+      </ThemeProvider>
+    );
+  }
+
+  if (appState === 'privacy') {
+    return (
+      <ThemeProvider>
+        <Privacy onBack={() => {
+          if (user) setAppState('app');
+          else setAppState('welcome');
+          window.history.pushState({}, '', '/');
+        }} />
       </ThemeProvider>
     );
   }
@@ -503,7 +540,15 @@ export default function App() {
             />
           </div>
         )}
+
+
+        {/* Footer */}
+        <Footer onNavigate={(path) => {
+          window.history.pushState({}, '', path);
+          if (path === '/terms') setAppState('terms');
+          if (path === '/privacy') setAppState('privacy');
+        }} />
       </div>
-    </ThemeProvider>
+    </ThemeProvider >
   );
 }
