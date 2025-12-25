@@ -61,7 +61,10 @@ export default function App() {
 
   // Debug: Check if Client ID is loaded
   useEffect(() => {
-    console.log('Google Client ID Status:', GOOGLE_CLIENT_ID ? 'Loaded' : 'Missing', GOOGLE_CLIENT_ID.substring(0, 10) + '...');
+    console.log('Google Client ID Status:', GOOGLE_CLIENT_ID ? 'Loaded' : 'Missing');
+    if (GOOGLE_CLIENT_ID) {
+      console.log('Diagnostic: Client ID length =', GOOGLE_CLIENT_ID.length);
+    }
   }, []);
 
   // Check authentication on mount - NO PAYMENT BLOCKER

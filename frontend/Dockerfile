@@ -7,7 +7,10 @@ COPY package.json package-lock.json* ./
 
 # 1. Declare the argument
 ARG VITE_GOOGLE_CLIENT_ID
-# 2. Set it as an environment variable for the build step
+
+# 2. Create a .env file for the build step
+# This ensures Vite "bakes" the variable into the static files
+RUN echo "VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID" > .env
 ENV VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID
 
 RUN npm install
