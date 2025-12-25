@@ -8,12 +8,13 @@ import { cn } from './ui/utils';
 
 interface HomeProps {
   onManualEntry: () => void;
+  onDashboardClick?: () => void;
   onTokenUsage: (tokens: number) => boolean;
   aiQuotaRemaining: number;
   hasUnlimitedAI: boolean;
 }
 
-export function Home({ onManualEntry, onTokenUsage, aiQuotaRemaining, hasUnlimitedAI }: HomeProps) {
+export function Home({ onManualEntry, onDashboardClick, onTokenUsage, aiQuotaRemaining, hasUnlimitedAI }: HomeProps) {
   const [aiMode, setAiMode] = useState<'voice' | 'text' | null>(null);
 
   return (
@@ -121,14 +122,26 @@ export function Home({ onManualEntry, onTokenUsage, aiQuotaRemaining, hasUnlimit
                   </li>
                 </ul>
 
-                <Button
-                  onClick={onManualEntry}
-                  variant="outline"
-                  className="w-full group-hover:bg-gray-100 dark:group-hover:bg-gray-800"
-                >
-                  Start Manual Entry
-                  <ArrowRight className="w-4 h-4 ml-2" />
-                </Button>
+                <div className="flex gap-2">
+                  <Button
+                    onClick={onManualEntry}
+                    variant="outline"
+                    className="flex-1 group-hover:bg-gray-100 dark:group-hover:bg-gray-800"
+                  >
+                    Start Manual Entry
+                    <ArrowRight className="w-4 h-4 ml-2" />
+                  </Button>
+
+                  {onDashboardClick && (
+                    <Button
+                      onClick={onDashboardClick}
+                      variant="outline"
+                      className="flex-1 group-hover:bg-gray-100 dark:group-hover:bg-gray-800"
+                    >
+                      Go to Dashboard
+                    </Button>
+                  )}
+                </div>
               </CardContent>
             </Card>
           </div>

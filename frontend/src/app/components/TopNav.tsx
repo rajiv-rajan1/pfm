@@ -1,6 +1,8 @@
-import { TrendingUp, Home as HomeIcon, LayoutDashboard, CreditCard, User } from 'lucide-react';
+import { TrendingUp, Home as HomeIcon, LayoutDashboard, CreditCard, User, LogIn, LogOut as LogOutIcon } from 'lucide-react';
 import { Button } from './ui/button';
 import { ThemeToggle } from './ThemeToggle';
+import { useAuth } from '../services/AuthService';
+import { useNavigate } from 'react-router-dom';
 
 interface TopNavProps {
   showDemo?: boolean;
@@ -27,6 +29,9 @@ export function TopNav({
   onProfileClick,
   currentPage = 'other',
 }: TopNavProps) {
+  const { user, logout } = useAuth();
+  const navigate = useNavigate();
+
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
@@ -57,7 +62,7 @@ export function TopNav({
               Home
             </Button>
           )}
-          
+
           {showDemo && onDemoClick && (
             <Button
               variant={currentPage === 'dashboard' ? 'default' : 'ghost'}
@@ -68,7 +73,7 @@ export function TopNav({
               Demo
             </Button>
           )}
-          
+
           {showDashboard && onDashboardClick && (
             <Button
               variant={currentPage === 'dashboard' ? 'default' : 'ghost'}
@@ -79,7 +84,7 @@ export function TopNav({
               Dashboard
             </Button>
           )}
-          
+
           {showPlans && onPlansClick && (
             <Button
               variant={currentPage === 'plans' ? 'default' : 'ghost'}
@@ -90,7 +95,8 @@ export function TopNav({
               Plans
             </Button>
           )}
-          
+
+          {/* Profile in center nav if requested via props */}
           {showProfile && onProfileClick && (
             <Button
               variant={currentPage === 'profile' ? 'default' : 'ghost'}
@@ -105,6 +111,15 @@ export function TopNav({
 
         {/* Right Actions */}
         <div className="flex items-center gap-2">
+          {!user ? (
+            <Button variant="ghost" onClick={() => navigate('/login')}>
+              Login
+            </Button>
+          ) : (
+            <Button variant="ghost" size="icon" onClick={() => logout()} title="Logout">
+              <LogOutIcon />
+            </Button>
+          )}
           <ThemeToggle />
         </div>
       </div>
@@ -123,7 +138,7 @@ export function TopNav({
               Home
             </Button>
           )}
-          
+
           {showDemo && onDemoClick && (
             <Button
               variant={currentPage === 'dashboard' ? 'default' : 'ghost'}
@@ -135,7 +150,7 @@ export function TopNav({
               Demo
             </Button>
           )}
-          
+
           {showDashboard && onDashboardClick && (
             <Button
               variant={currentPage === 'dashboard' ? 'default' : 'ghost'}
@@ -147,7 +162,7 @@ export function TopNav({
               Dashboard
             </Button>
           )}
-          
+
           {showPlans && onPlansClick && (
             <Button
               variant={currentPage === 'plans' ? 'default' : 'ghost'}
@@ -159,7 +174,7 @@ export function TopNav({
               Plans
             </Button>
           )}
-          
+
           {showProfile && onProfileClick && (
             <Button
               variant={currentPage === 'profile' ? 'default' : 'ghost'}

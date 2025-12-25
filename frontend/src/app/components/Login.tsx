@@ -4,18 +4,14 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card';
-import { TopNav } from './TopNav';
-import { useAuth } from '../services/AuthService';
+import { useAuth, AuthService } from '../services/AuthService';
 import { GoogleLogin, CredentialResponse } from '@react-oauth/google';
 
 interface LoginProps {
   onLoginSuccess: () => void;
-  onBackToWelcome: () => void;
-  onDemoClick?: () => void;
-  onPlansClick?: () => void;
 }
 
-export function Login({ onLoginSuccess, onBackToWelcome, onDemoClick, onPlansClick }: LoginProps) {
+export function Login({ onLoginSuccess }: LoginProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -54,16 +50,6 @@ export function Login({ onLoginSuccess, onBackToWelcome, onDemoClick, onPlansCli
 
   return (
     <div className="min-h-screen bg-background">
-      {/* Top Navigation */}
-      <TopNav
-        showDemo={true}
-        showPlans={true}
-        onHomeClick={onBackToWelcome}
-        onDemoClick={onDemoClick}
-        onPlansClick={onPlansClick}
-        currentPage="other"
-      />
-
       {/* Login Content */}
       <div className="min-h-[calc(100vh-5rem)] flex items-center justify-center bg-gradient-to-br from-blue-50 via-background to-purple-50 dark:from-gray-900 dark:via-background dark:to-gray-900 p-4">
         <div className="w-full max-w-md space-y-6">
@@ -217,21 +203,31 @@ export function Login({ onLoginSuccess, onBackToWelcome, onDemoClick, onPlansCli
                   <p className="text-sm text-yellow-800 dark:text-yellow-200">
                     You can sign in with Google or use the demo mode. Email/password login will use demo credentials.
                   </p>
+
+                  {/* Mock Login for Dev/Testing */}
+                  <div className="mt-4 pt-4 border-t border-yellow-200 dark:border-yellow-800">
+                    <p className="text-xs font-semibold uppercase text-yellow-800/60 dark:text-yellow-200/60 mb-2">
+                      Developer Tools
+                    </p>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="w-full bg-white/50 dark:bg-black/20 hover:bg-white/80 dark:hover:bg-black/40 border-yellow-200/50 dark:border-yellow-800/50"
+                      onClick={() => {
+                        const mockUser = { id: "mock_user_1", name: "Test Explorer", email: "explorer@2t1.ai", provider: "mock" };
+                        // @ts-ignore
+                        AuthService.saveUser(mockUser);
+                        window.location.href = "/";
+                      }}
+                    >
+                      Mock Login (Test Explorer)
+                    </Button>
+                  </div>
                 </div>
               </div>
             </CardContent>
           </Card>
 
-          {/* Back to Welcome */}
-          <div className="text-center">
-            <Button
-              variant="ghost"
-              onClick={onBackToWelcome}
-              className="text-muted-foreground"
-            >
-              ← Back to Welcome
-            </Button>
-          </div>
         </div>
       </div>
     </div>

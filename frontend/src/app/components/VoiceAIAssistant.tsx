@@ -48,7 +48,7 @@ export function VoiceAIAssistant({
   const [inputText, setInputText] = useState('');
   const [showTyping, setShowTyping] = useState(defaultMode === 'text');
   const [isProcessing, setIsProcessing] = useState(false);
-  
+
   const recognitionRef = useRef<any>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const synthRef = useRef<SpeechSynthesis | null>(null);
@@ -57,7 +57,7 @@ export function VoiceAIAssistant({
   useEffect(() => {
     if (typeof window !== 'undefined') {
       const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      
+
       if (SpeechRecognition) {
         recognitionRef.current = new SpeechRecognition();
         recognitionRef.current.continuous = true;
@@ -137,14 +137,14 @@ export function VoiceAIAssistant({
     // Simulate AI processing (replace with actual API call)
     setTimeout(async () => {
       const response = await generateAIResponse(text);
-      
+
       const assistantMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
         content: response,
         timestamp: new Date(),
       };
-      
+
       setMessages(prev => [...prev, assistantMessage]);
       setIsProcessing(false);
 
@@ -173,10 +173,10 @@ export function VoiceAIAssistant({
       utterance.rate = 1.0;
       utterance.pitch = 1.0;
       utterance.volume = 1.0;
-      
+
       utterance.onstart = () => setIsSpeaking(true);
       utterance.onend = () => setIsSpeaking(false);
-      
+
       synthRef.current.speak(utterance);
     }
   };
@@ -191,7 +191,7 @@ export function VoiceAIAssistant({
   // Mock AI response generator (replace with actual AI API)
   const generateAIResponse = async (input: string): Promise<string> => {
     const lowerInput = input.toLowerCase();
-    
+
     if (lowerInput.includes('income') || lowerInput.includes('salary')) {
       return "I can help you track your income. What's your monthly income source and amount?";
     } else if (lowerInput.includes('expense') || lowerInput.includes('spent')) {
@@ -225,14 +225,14 @@ export function VoiceAIAssistant({
       className
     )}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b bg-gradient-to-r from-blue-600 to-purple-600">
+      <div className="flex items-center justify-between p-4 border-b bg-background">
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
             <Mic className="w-4 h-4 text-white" />
           </div>
           <div>
-            <h3 className="font-semibold text-white">AI Finance Assistant</h3>
-            <p className="text-xs text-white/80">Voice & Chat Enabled</p>
+            <h3 className="font-semibold text-foreground">AI Finance Assistant</h3>
+            <p className="text-xs text-muted-foreground">Voice & Chat Enabled</p>
           </div>
         </div>
         <div className="flex items-center gap-1">
@@ -260,7 +260,7 @@ export function VoiceAIAssistant({
             variant="ghost"
             size="icon"
             onClick={onClose}
-            className="text-white hover:bg-white/20"
+            className="text-foreground hover:bg-muted"
           >
             <X className="w-4 h-4" />
           </Button>
@@ -298,7 +298,7 @@ export function VoiceAIAssistant({
               </div>
             </div>
           ))}
-          
+
           {isProcessing && (
             <div className="flex gap-3 justify-start">
               <div className="w-8 h-8 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 flex items-center justify-center flex-shrink-0">
@@ -328,14 +328,14 @@ export function VoiceAIAssistant({
                 "bg-gradient-to-r from-blue-500/30 to-purple-500/30",
                 "animate-ping"
               )} />
-              
+
               {/* Middle ring */}
               <div className={cn(
                 "absolute w-32 h-32 rounded-full border-4",
                 "border-blue-500/50 dark:border-purple-500/50",
                 "animate-pulse"
               )} />
-              
+
               {/* Inner animated circle */}
               <div className={cn(
                 "w-24 h-24 rounded-full flex items-center justify-center",
@@ -346,7 +346,7 @@ export function VoiceAIAssistant({
                 <Mic className="w-10 h-10 text-white animate-pulse" />
               </div>
             </div>
-            
+
             <div className="space-y-2">
               <p className="text-lg font-medium">Listening...</p>
               {transcript && (
