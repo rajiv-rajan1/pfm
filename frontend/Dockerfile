@@ -58,8 +58,11 @@ RUN echo 'server { \
 # Ensure the final config directory exists
 RUN mkdir -p /etc/nginx/conf.d
 
+# Set a default value for BACKEND_API_URL to prevent Nginx crash if variable is missing
+ENV BACKEND_API_URL=http://localhost:8000
+
 # Expose 8080
 EXPOSE 8080
 
-# Start Nginx (envsubst happens automatically by entrypoint)
+# Start Nginx (standard entrypoint handles envsubst)
 CMD ["nginx", "-g", "daemon off;"]
