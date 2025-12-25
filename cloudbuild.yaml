@@ -1,14 +1,13 @@
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    entrypoint: 'bash'
     args:
-      - '-c'
-      - |
-        docker build \
-        --build-arg VITE_GOOGLE_CLIENT_ID=${_VITE_GOOGLE_CLIENT_ID} \
-        -t ${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA \
-        .
+      - 'build'
+      - '--build-arg'
+      - 'VITE_GOOGLE_CLIENT_ID=${_VITE_GOOGLE_CLIENT_ID}'
+      - '-t'
+      - '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA'
+      - '.'
     dir: 'frontend'
     id: 'Build'
 
