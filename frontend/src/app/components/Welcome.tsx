@@ -2,13 +2,15 @@ import { TrendingUp, BarChart3, Target, Sparkles, ArrowRight, LayoutDashboard } 
 import { Button } from './ui/button';
 import { Card, CardContent } from './ui/card';
 import { TopNav } from './TopNav';
+import { Footer } from './Footer';
 
 interface WelcomeProps {
   onGetStarted: () => void;
   onGoToDashboard?: () => void;
+  onNavigate: (path: string) => void;
 }
 
-export function Welcome({ onGetStarted, onGoToDashboard }: WelcomeProps) {
+export function Welcome({ onGetStarted, onGoToDashboard, onNavigate }: WelcomeProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* Top Navigation */}
@@ -148,6 +150,9 @@ export function Welcome({ onGetStarted, onGoToDashboard }: WelcomeProps) {
           </Card>
         </div>
       </div>
+
+      {/* Footer */}
+      <Footer onNavigate={onNavigate} />
     </div>
   );
 }

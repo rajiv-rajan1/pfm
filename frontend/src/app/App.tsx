@@ -199,6 +199,11 @@ export default function App() {
         <Welcome
           onGetStarted={handleGetStarted}
           onGoToDashboard={user ? handleGoToDashboard : undefined}
+          onNavigate={(path) => {
+            window.history.pushState({}, '', path);
+            if (path === '/terms') setAppState('terms');
+            if (path === '/privacy') setAppState('privacy');
+          }}
         />
       </ThemeProvider>
     );
