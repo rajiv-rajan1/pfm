@@ -48,7 +48,7 @@ import { useTrial } from './services/TrialService';
 import { MockDataService } from './services/MockDataService';
 import { GoogleOAuthProvider } from '@react-oauth/google';
 
-const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
+const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 type AppState = 'welcome' | 'login' | 'home' | 'manual-entry' | 'onboarding' | 'app' | 'activation' | 'terms' | 'privacy';
 type View = 'home' | 'dashboard' | 'reports' | 'goals' | 'settings' | 'about';
@@ -62,7 +62,6 @@ export default function App() {
   const [aiMinimized, setAiMinimized] = useState(false);
   const [isUsingMockData, setIsUsingMockData] = useState(true);
 
-  // Debug: Check if Client ID is loaded
   // Debug: Check if Client ID is loaded
   useEffect(() => {
     console.log('Google Client ID Status:', GOOGLE_CLIENT_ID ? 'Loaded' : 'Missing');
