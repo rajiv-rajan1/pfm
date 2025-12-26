@@ -49,7 +49,7 @@ substitutions:
   _TRIGGER_ID: '' # Default empty
   _SA_EMAIL: 'github-ci-cd@pfm-2t1.iam.gserviceaccount.com' # Service Account to run as
   _VITE_GOOGLE_CLIENT_ID: 'PLACEHOLDER_VALUE' # Overridden by Trigger
-  _VITE_BACKEND_URL: 'https://pfm-backend-placeholder.run.app' # Overridden by Trigger
+  _VITE_BACKEND_URL: 'https://pfm-backend-386128391538.us-central1.run.app' # Default fallback if Trigger missing
 
 options:
   logging: CLOUD_LOGGING_ONLY
