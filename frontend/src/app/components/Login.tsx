@@ -91,7 +91,6 @@ export function Login({ onLoginSuccess }: LoginProps) {
                   theme="outline"
                   size="large"
                   text="continue_with"
-                  width="100%"
                 />
               </div>
 
