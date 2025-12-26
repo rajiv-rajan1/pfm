@@ -5,13 +5,16 @@ WORKDIR /app
 # Install dependencies
 COPY package.json package-lock.json* ./
 
-# 1. Declare the argument
+# 1. Declare the arguments
 ARG VITE_GOOGLE_CLIENT_ID
+ARG VITE_BACKEND_URL
 
 # 2. Create a .env file for the build step
-# This ensures Vite "bakes" the variable into the static files
-RUN echo "VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID" > .env
+# This ensures Vite "bakes" the variables into the static files
+RUN echo "VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID" > .env && \
+    echo "VITE_BACKEND_URL=$VITE_BACKEND_URL" >> .env
 ENV VITE_GOOGLE_CLIENT_ID=$VITE_GOOGLE_CLIENT_ID
+ENV VITE_BACKEND_URL=$VITE_BACKEND_URL
 
 RUN npm install
 

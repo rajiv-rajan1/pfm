@@ -94,7 +94,8 @@ export class AuthService {
   static async signInWithGoogle(credentialToken: string): Promise<User> {
     try {
       // Send credential to backend for verification
-      const apiPath = '/api/auth/google';
+      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      const apiPath = `${backendUrl}/api/auth/google`;
       console.log(`Authenticating with backend at: ${apiPath}`);
 
       const response = await fetch(apiPath, {

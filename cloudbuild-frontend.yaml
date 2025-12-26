@@ -1,7 +1,7 @@
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '--build-arg', 'VITE_GOOGLE_CLIENT_ID=${_VITE_GOOGLE_CLIENT_ID}', '-t', '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA', '.']
+    args: ['build', '--build-arg', 'VITE_GOOGLE_CLIENT_ID=${_VITE_GOOGLE_CLIENT_ID}', '--build-arg', 'VITE_BACKEND_URL=${_VITE_BACKEND_URL}', '-t', '${_AR_HOSTNAME}/${_AR_PROJECT_ID}/${_AR_REPOSITORY}/${_SERVICE_NAME}:$SHORT_SHA', '.']
     dir: 'frontend'
     id: 'Build'
 
@@ -49,6 +49,7 @@ substitutions:
   _TRIGGER_ID: '' # Default empty
   _SA_EMAIL: 'github-ci-cd@pfm-2t1.iam.gserviceaccount.com' # Service Account to run as
   _VITE_GOOGLE_CLIENT_ID: 'PLACEHOLDER_VALUE' # Overridden by Trigger
+  _VITE_BACKEND_URL: 'https://pfm-backend-placeholder.run.app' # Overridden by Trigger
 
 options:
   logging: CLOUD_LOGGING_ONLY
