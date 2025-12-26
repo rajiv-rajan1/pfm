@@ -27,6 +27,8 @@ steps:
       - '--allow-unauthenticated'
       - '--max-instances=1'
       - '--memory=1Gi'
+      - '--set-env-vars'
+      - 'GOOGLE_CLIENT_ID=${_GOOGLE_CLIENT_ID}'
     id: 'Deploy'
 
 images:
@@ -41,6 +43,7 @@ substitutions:
   _SERVICE_NAME: 'pfm-backend'
   _TRIGGER_ID: ''
   _SA_EMAIL: 'github-ci-cd@pfm-2t1.iam.gserviceaccount.com'
+  _GOOGLE_CLIENT_ID: 'PLACEHOLDER' # Check Trigger settings
 
 options:
   logging: CLOUD_LOGGING_ONLY
