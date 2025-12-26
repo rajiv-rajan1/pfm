@@ -68,7 +68,7 @@ async def get_current_user(token: str = Depends(oauth2_scheme)):
     # Return dummy admin user
     return models.User(id=1, email="admin@example.com", hashed_password="admin")
 
-# Startup Event: Seed Admin User
+# Startup Event: Seed Admin User for testing
 @app.on_event("startup")
 def startup_event():
     db = SessionLocal()
