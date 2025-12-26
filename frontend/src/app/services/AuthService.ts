@@ -93,8 +93,12 @@ export class AuthService {
    */
   static async signInWithGoogle(credentialToken: string): Promise<User> {
     try {
-      // Send credential to backend for verification
-      const backendUrl = import.meta.env.VITE_BACKEND_URL || '';
+      // Send credential to backend for verifying
+      // TEMPORARY: Hardcoded URL for debugging
+      const backendUrl = 'https://pfm-backend-386128391538.us-central1.run.app';
+
+      console.log('DEBUG: Using Hardcoded Backend URL:', backendUrl);
+
       const apiPath = `${backendUrl}/api/auth/google`;
       console.log(`Authenticating with backend at: ${apiPath}`);
 
